@@ -20,15 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-/* this resource has functions :
 
-1- index() will return all tasks for all projects.
-2- show($id) will return task related to specific "id".
-3- update(Request $request, $id) will update specific task.
-4- destroy($id) will delete specific task. 
+// return all tasks for all projects.
+Route::get("tasks", [TaskController::class, "tasks"]);
 
-*/
-Route::apiResource('tasks', TaskController::class);
+// return task related to specific "id".
+Route::get("show_task/{id}", [TaskController::class, "show_task"]);
+
+//update specific task.
+Route::put("update_task/{id}", [TaskController::class, "update_task"]);
+
+//delete specific task. 
+Route::delete("delete_task/{id}", [TaskController::class, "delete_task"]);
 
 // this route to show tasks related to specific project.
 Route::get("/project/{id}", [TaskController::class, "project_task"]);
