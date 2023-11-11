@@ -42,4 +42,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function task()
+    {
+        return $this->hasOne(Task::class);
+    }
+
+    public function subtask()
+    {
+        return $this->hasOne(Subtask::class);
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
