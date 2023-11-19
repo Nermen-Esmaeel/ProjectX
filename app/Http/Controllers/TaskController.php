@@ -27,7 +27,7 @@ class TaskController extends Controller
     }
 
 
-    public function create_task()
+    public function GetUsers()
 
     {
         $users = User::all();
@@ -54,14 +54,14 @@ class TaskController extends Controller
                 $validatedData = $request->validate([
                     'title' => 'required|string|max:255',
                     "type" => 'required|string|max:255',
-                    "start_date" => 'required|date',
-                    'end_date' => 'required|date',
+                    "start_date" => 'required|date|date_format:Y-m-d',
+                    'end_date' => 'required|date|date_format:Y-m-d',
                     //'time_spent' => 'required|date',
                     'description' => 'required|string|max:255',
                     'priority' => 'required|in:low,high',
                     'status' => 'required|in:Pending,Canceled,Completed,OnProgress,OnHold',
                     //'project_id' => 'required|numeric|gt:0|integer|exists:projects,id',
-                    'assign_to' => 'required|numeric|gt:0|integer|exists:projects,id',
+                    'user_id' => 'required|numeric|gt:0|integer|exists:users,id',
                 ]);
 
                 $task = new Task;
@@ -74,7 +74,7 @@ class TaskController extends Controller
                 $task->status = $validatedData['status'];
                 //$task->project_id = $validatedData['project_id'];
                 $task->project_id = $id;
-                $task->assign_to = $validatedData['assign_to'];
+                $task->user_id = $validatedData['user_id'];
 
 
                 $task->save();
@@ -109,7 +109,7 @@ class TaskController extends Controller
                 'priority' => 'required|in:low,high',
                 'status' => 'required|in:Pending,Canceled,Completed,OnProgress,OnHold',
                 'project_id' => 'required|numeric|gt:0|integer|exists:projects,id',
-                'assign_to' => 'required|numeric|gt:0|integer|exists:users,id',
+                'user_id' => 'required|numeric|gt:0|integer|exists:users,id',
             ]);
 
 
@@ -123,7 +123,7 @@ class TaskController extends Controller
             $task->priority = $validatedData['priority'];
             $task->status = $validatedData['status'];
             $task->project_id = $validatedData['project_id'];
-            $task->assign_to = $validatedData['assign_to'];
+            $task->user_id = $validatedData['user_id'];
 
 
             $task->save();
