@@ -22,13 +22,11 @@ return new class extends Migration
             $table->string('department', 255);
             $table->string('designation', 255);
             $table->string('phone', 255);
-            $table->string('image', 255);
+            $table->string('image', 255)->nullable();
             $table->string('email', 255)->unique();
             $table->string('password', 255);
             $table->string('country', 255);
-            $table->boolean('onteak');
-            $table->unsignedBigInteger('created_by');
-
+            $table->boolean('onteak')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

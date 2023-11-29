@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttachmentController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\TaskController;
@@ -19,9 +19,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+/* ************************* Admin profile, login, logout********************************* */
+Route::prefix('Admin')->group( function(){
+    Route::post('login',[AdminAuthController::class ,'login']);
+    Route::get('profile',[AdminAuthController::class ,'userProfile']);
+    Route::post('logout',[AdminAuthController::class ,'logout']);
 });
+
+
+
 /* *************************create user, login, logout********************************* */
 
 Route::post("/register", [AuthController::class, "register"]);
@@ -39,7 +45,7 @@ Route::get("show_task/{id}", [TaskController::class, "show_task"]);
 //update specific task.
 Route::put("update_task/{id}", [TaskController::class, "update_task"]);
 
-//delete specific task. 
+//delete specific task.
 Route::delete("delete_task/{id}", [TaskController::class, "delete_task"]);
 
 // this route to show tasks related to specific project.
@@ -63,7 +69,7 @@ Route::get("show_subtask/{id}", [SubtaskController::class, "show_subtask"]);
 //update specific subtask.
 Route::put("update_subtask/{id}", [SubtaskController::class, "update_subtask"]);
 
-//delete specific subtask. 
+//delete specific subtask.
 Route::delete("delete_subtask/{id}", [SubtaskController::class, "delete_subtask"]);
 
 // this route to show tasks related to specific project.
@@ -87,7 +93,7 @@ Route::get("show_comment/{id}", [CommentController::class, "show_comment"]);
 //update specific comment.
 Route::put("update_comment/{id}", [CommentController::class, "update_comment"]);
 
-//delete specific comment. 
+//delete specific comment.
 Route::delete("delete_comment/{id}", [CommentController::class, "delete_comment"]);
 
 // this route to show comments related to specific subtask.
@@ -109,7 +115,7 @@ Route::get("show_attachment/{id}", [AttachmentController::class, "show_attachmen
 //update specific attachment.
 Route::put("update_attachment/{id}", [AttachmentController::class, "update_attachment"]);
 
-//delete specific attachment. 
+//delete specific attachment.
 Route::delete("delete_attachment/{id}", [AttachmentController::class, "delete_attachment"]);
 
 // this route to show attachments related to specific subtask.
