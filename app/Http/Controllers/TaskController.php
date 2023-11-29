@@ -125,6 +125,18 @@ class TaskController extends Controller
             $task->project_id = $validatedData['project_id'];
             $task->user_id = $validatedData['user_id'];
 
+            if ($task->status == 'Completed') {
+                $createdAt = $task->created_at;
+                $now = now();
+
+                $interval = $createdAt->diff($now);
+                $months = $interval->m;
+                $weeks = floor($interval->d / 7);
+                $days = $interval->d % 7;
+
+                $timeSpent = "$months months, $weeks weeks, $days days";
+                $task->time_spent = $timeSpent;
+            }
 
             $task->save();
 

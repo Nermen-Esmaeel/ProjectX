@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\TaskController;
@@ -18,9 +19,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+/* *************************create user, login, logout********************************* */
+
+Route::post("/register", [AuthController::class, "register"]);
+Route::post("/login", [AuthController::class, "login"]);
+Route::post("/logout", [AuthController::class, "logout"])->middleware('auth:api');
 
 /* *************************Task********************************* */
 
@@ -67,7 +73,7 @@ Route::get("/task/{id}", [SubtaskController::class, "task_subtask"]);
 Route::get("GetUsers", [SubtaskController::class, "GetUsers"]);
 
 //this route to store a task related to specific project by passing the project_id..
-Route::post("store_subtask/{id}", [SubtaskController::class, "store_subtask"]);
+Route::post("store_subtask/{id}", [SubtaskController::class, "store_subtask"])->middleware('auth:api');
 
 
 /* *************************comment********************************* */

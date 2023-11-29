@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -76,6 +77,7 @@ class SubtaskController extends Controller
                 $subtask->priority = $validatedData['priority'];
                 $subtask->status = $validatedData['status'];
                 //$task->project_id = $validatedData['project_id'];
+                $subtask->owner_id = $request->user()->id;
                 $subtask->sub_task_attch_link = $validatedData['sub_task_attch_link'];
                 $subtask->task_id = $id;
                 $subtask->user_id = $validatedData['user_id'];

@@ -32,26 +32,48 @@ class AttachmentController extends Controller
     {
         $validator = Validator::make(['id' => $id], [
             'id' => 'required|numeric|gt:0|integer|exists:subtasks,id',
+            //'file' => 'required|mimes:doc,docx,pdf,txt,png,jpg,jpeg,gif',
+
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         } else {
             try {
-                $validatedData = $request->validate([
-                    'attach_link' => 'required|string|max:255',
+                if ($file = $request->file('file')) {
+                    $path = $file->store('public/files');
+                    //$name = $file->getClientOriginalName();
 
-                ]);
+                    //store your file into directory and db
+                    $attachment = new Attachment();
+                    //$attachment->name = $file;
+                    $attachment->attach_link = $path;
+                    $attachment->subtask_id = $id;
+                    $attachment->save();
 
-                $attachment = new Attachment();
-                $attachment->attach_link = $validatedData['attach_link'];
-                $attachment->subtask_id = $id;
+                    return response()->json([
+                        "success" => true,
+                        "message" => "File successfully uploaded",
+                        "file" => $path
+                    ]);
+                }
+
+                // $result = $request->file("file")->store("files_1");
+                // return response(["res" => $result]);
+                // $validatedData = $request->validate([
+                //     'attach_link' => 'required|string|max:255',
+
+                // ]);
+
+
+                //$attachment->attach_link = $validatedData['attach_link'];
 
 
 
-                $attachment->save();
 
-                return response()->json(['message' => 'Record created successfully', $attachment], 200);
+                //$attachment->save();
+
+                //return response()->json(['message' => 'attachment uploaded successfully', $attachment], 200);
             } catch (ValidationException $e) {
                 return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 422);
             }
