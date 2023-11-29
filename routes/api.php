@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\AttachmentController;
-use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\SubtaskController;
-use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SubtaskController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AttachmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,12 +28,20 @@ Route::prefix('Admin')->group( function(){
 });
 
 
-
 /* *************************create user, login, logout********************************* */
 
 Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"])->middleware('auth:api');
+
+
+/* *************************create user, delete user, update user , show users********************************* */
+
+    Route::get('users',[UserController::class ,'index']);
+    Route::post('users',[UserController::class ,'store']);
+    Route::put('users/{id}',[UserController::class ,'update']);
+    Route::delete('users/{id}',[UserController::class ,'destroy']);
+
 
 /* *************************Task********************************* */
 
