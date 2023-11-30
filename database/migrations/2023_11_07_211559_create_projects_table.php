@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->string("title");
-            $table->string("type");
-            $table->date("start_date");
-            $table->date("end_date");
-            $table->longText("description");
-            $table->string("image");
-            $table->enum("status", ["OffTrack", "OnTrack", "Complete", "Pending"]);
+            $table->string('title');
+            $table->string('type');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->longText('description');
+            $table->string('image');
+            $table->enum('status', ['OffTrack', 'OnTrack', 'Complete', 'Pending']);
             $table->timestamps();
         });
     }

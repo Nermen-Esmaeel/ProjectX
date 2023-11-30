@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AttachmentController;
@@ -41,6 +42,13 @@ Route::post("/logout", [AuthController::class, "logout"])->middleware('auth:api'
     Route::post('users',[UserController::class ,'store']);
     Route::put('users/{id}',[UserController::class ,'update']);
     Route::delete('users/{id}',[UserController::class ,'destroy']);
+
+    /* *************************create project, delete project, update project , show project********************************* */
+
+    Route::get('projects',[ProjectController::class ,'index']);
+    Route::post('projects',[ProjectController::class ,'store']);
+    Route::put('projects/{id}',[ProjectController::class ,'update']);
+    Route::delete('projects/{id}',[ProjectController::class ,'destroy']);
 
 
 /* *************************Task********************************* */

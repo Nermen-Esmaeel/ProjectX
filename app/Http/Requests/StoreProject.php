@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserStore extends FormRequest
+class StoreProject extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +24,14 @@ class UserStore extends FormRequest
     public function rules(): array
     {
         return [
-
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|min:6',
-            'address' => 'required|string',
-            'nationality' => 'required|string',
-            'department' => 'required|string',
-            'designation' => 'required|string',
-            'phone' => 'required|string',
+            'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+            'description' => 'required|string',
+            'status' => 'required|in:OffTrack,OnTrack,Complete,Pending',
             'image' => 'required|image|mimes:jpeg,jpg,png,gif',
-            'country' => 'required|string',
-            'onteak' => 'boolean',
+            'users.*' => 'required|numeric|gt:0|integer',
         ];
     }
 
