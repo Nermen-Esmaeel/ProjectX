@@ -16,11 +16,11 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $projects = Project::with('users')->get();
+        $projects = Project::with('users')->latest()->paginate(8);
         return response()->json([
             'status' => 'success',
-            'projects' => ProjectResource::collection($projects),
-        ], 401);
+            'projects' => ProjectResource::collection($projects)->response()->getData(true),
+        ], 200);
     }
 
     public function store(StoreProject $request)
@@ -53,10 +53,57 @@ class ProjectController extends Controller
         }
         return response()->json([
             'status' => 'success',
+             'project' => new ProjectResource($project),
             'message' => 'Project created successfully'
         ], 201);
 
     }
+
+    public function update(StoreProject $request, $id)
+    {
+
+        $project = Project::findOrFail($id);
+
+        $input = $request->input();
+
+        $project->update($input);
+
+         if ($request->hasFile('image')) {
+
+            $file_name = $request->file('image')->getClientOriginalName();
+            $file_to_store = 'project_images' . '_' . time().$file_name;
+            $request->file('image')->storeAs('public/' . 'project_images', $file_to_store);
+            $path ='storage/project_images/'.$file_to_store;
+
+            $project->update([
+                'image' => $path,
+            ]);
+        }
+
+        //add member for project table
+        if ($users = $request->users) {
+
+             $project->users()->sync($users);
+
+        }
+        return response()->json([
+            'status' => 'success',
+            'project' => new ProjectResource($project),
+            'message' => 'Project updated successfully'
+        ], 201);
+
+    }
+
+        //delete an project
+        public function destroy($id)
+        {
+            $project = Project::findOrFail($id);
+            $project->delete();
+            return response()->json(['status' => 'success','message' => 'the Project deleted successfully'], 200);
+
+        }
+
+
 
 
 }

@@ -30,7 +30,7 @@ class StoreProject extends FormRequest
             'end_date' => 'required|date',
             'description' => 'required|string',
             'status' => 'required|in:OffTrack,OnTrack,Complete,Pending',
-            'image' => 'required|image|mimes:jpeg,jpg,png,gif',
+            'image' => 'required|file|mimes:jpeg,jpg,png,gif',
             'users.*' => 'required|numeric|gt:0|integer',
         ];
     }

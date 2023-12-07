@@ -34,7 +34,7 @@ class UserStore extends FormRequest
             'department' => 'required|string',
             'designation' => 'required|string',
             'phone' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,jpg,png,gif',
+            'image' => 'required|file|mimes:jpeg,jpg,png,gif',
             'country' => 'required|string',
             'onteak' => 'boolean',
         ];

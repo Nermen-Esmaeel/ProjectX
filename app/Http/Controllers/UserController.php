@@ -18,11 +18,11 @@ class UserController extends Controller
 
    public function index(){
 
-    $users = User::query()->get();
+    $users = User::all();
     return response()->json([
         'status' => 'success',
-        'users' => $users,
-    ], 401);
+        'users' => UserResource::collection($users),
+    ], 200);
 
    }
 

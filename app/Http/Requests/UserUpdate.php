@@ -34,7 +34,7 @@ class UserUpdate extends FormRequest
             'department' => 'nullable|string',
             'designation' => 'nullable|string',
             'phone' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,jpg,png,gif',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png,gif',
             'country' => 'nullable|string',
             'onteak' => 'boolean',
         ];
