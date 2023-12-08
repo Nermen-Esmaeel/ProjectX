@@ -9,10 +9,10 @@ class Attachment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["attach_link", "subtask_id",];
+    protected $fillable = ['attach_link'];
 
     public function subtasks(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'subtasks_attachments', 'attachment_id', 'subtask_id');
+        return $this->belongsToMany(Subtask::class, 'subtasks_attachments', 'attachment_id', 'subtask_id');
     }
 }

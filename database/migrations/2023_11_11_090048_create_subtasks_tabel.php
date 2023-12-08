@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum("priority", ["high", "low"]);
             $table->date("start_date");
             $table->date("end_date");
-            $table->longText("desciption");
+            $table->longText('desc')->nullable();
             $table->unsignedBigInteger("owner_id")->nullable();
 
             $table->unsignedBigInteger("user_id");

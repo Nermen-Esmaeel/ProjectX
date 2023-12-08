@@ -16,7 +16,7 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $projects = Project::with('users')->latest()->paginate(8);
+        $projects = Project::with('users')->latest()->paginate(6);
         return response()->json([
             'status' => 'success',
             'projects' => ProjectResource::collection($projects)->response()->getData(true),

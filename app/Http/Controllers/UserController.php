@@ -29,16 +29,8 @@ class UserController extends Controller
    // store user
    public function store(UserStore $request){
 
-        if ($request->hasFile('image')) {
-
-            $file_name = $request->file('image')->getClientOriginalName();
-            $file_to_store = 'user_images' . '_' . time().$file_name;
-            $request->file('image')->storeAs('public/' . 'user_images', $file_to_store);
-            $path ='storage/user_images/'.$file_to_store;
-        }
 
         $user = User::create([
-
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -48,13 +40,24 @@ class UserController extends Controller
             'department' => $request->department,
             'designation' => $request->designation,
             'phone' => $request->phone,
-            'image' =>  $path,
             'country' => $request->country,
             'onteak' => $request->onteak,
 
         ]);
 
         $user->save();
+
+        if ($request->hasFile('image')) {
+
+            $file_name = $request->file('image')->getClientOriginalName();
+            $file_to_store = 'user_images' . '_' . time().$file_name;
+            $request->file('image')->storeAs('public/' . 'user_images', $file_to_store);
+            $path ='storage/user_images/'.$file_to_store;
+            $user->update([
+                'image' =>  $path,
+            ]);
+
+        }
 
         return response()->json([
             'status' => 'success',
