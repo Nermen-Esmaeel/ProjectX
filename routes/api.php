@@ -69,7 +69,7 @@ Route::delete("delete_task/{id}", [TaskController::class, "delete_task"]);
 Route::get("/project/{id}", [TaskController::class, "project_task"]);
 
 // this route to show all users (full name) in order to choose one of them as assignee..
-Route::get("GetUsers", [TaskController::class, "GetUsers"]);
+Route::get("getUsers", [TaskController::class, "GetUsers"]);
 
 //this route to store a task related to specific project by passing the project_id..
 Route::post("store_task/{id}", [TaskController::class, "store_task"]);
@@ -96,7 +96,7 @@ Route::get("/task/{id}", [SubtaskController::class, "task_subtask"]);
 Route::get("GetUsers", [SubtaskController::class, "GetUsers"]);
 
 //this route to store a task related to specific project by passing the project_id..
-Route::post("store_subtask/{id}", [SubtaskController::class, "store_subtask"])->middleware('auth:api');
+Route::post("store_subtask/{id}", [SubtaskController::class, "store_subtask"]);
 
 
 /* *************************comment********************************* */

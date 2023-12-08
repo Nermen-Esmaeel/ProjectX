@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
             $table->string("attach_link");
-
-            $table->unsignedBigInteger("subtask_id");
-            $table->foreign("subtask_id")->references("id")->on("subtasks")->onDelete("cascade");
-
             $table->timestamps();
         });
     }

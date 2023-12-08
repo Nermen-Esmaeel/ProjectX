@@ -12,6 +12,12 @@ use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
+
+    public function __construct()
+    {
+       $this->middleware('auth');
+    }
+
     public function tasks()
     {
         $tasks = Task::all();
@@ -30,13 +36,11 @@ class TaskController extends Controller
     public function GetUsers()
 
     {
-        $users = User::all();
 
-        foreach ($users as $user) {
-            $users_name[] = $user->first_name . " " . $user->last_name;
-        }
+        $users = User::select('id', \DB::raw('CONCAT(first_name, " ", last_name) AS full_name'))
+        ->pluck('full_name', 'id');
 
-        return response()->json($users_name);
+        return response()->json($users);
     }
 
     public function store_task(Request $request, $id)
@@ -79,7 +83,7 @@ class TaskController extends Controller
 
                 $task->save();
 
-                return response()->json(['message' => 'Record created successfully', $task], 200);
+                return response()->json(['message' => 'Record created successfully','task'=>$task], 200);
             } catch (ValidationException $e) {
                 return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 422);
             }

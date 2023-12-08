@@ -9,7 +9,7 @@ class Subtask extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["title", "status", "priority", "start_date", "end_date", "desciption", "sub_task_attch_link", "owner_id", "user_id", "task_id"];
+    protected $fillable = ['title', 'status', 'priority', 'start_date', 'end_date', 'desciption','owner_id', 'user_id', 'task_id'];
 
 
     public function task()
@@ -27,8 +27,8 @@ class Subtask extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function attachment()
+    public function attachments(): BelongsToMany
     {
-        return $this->hasMany(Attachment::class);
+        return $this->belongsToMany(User::class, 'subtasks_attachments', 'subtask_id', 'attachment_id');
     }
 }

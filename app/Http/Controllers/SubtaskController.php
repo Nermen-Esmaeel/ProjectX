@@ -13,6 +13,11 @@ use Illuminate\Validation\ValidationException;
 
 class SubtaskController extends Controller
 {
+    public function __construct()
+    {
+       $this->middleware('auth');
+    }
+
     public function subtasks()
     {
         $subtasks = Subtask::all();
@@ -41,9 +46,8 @@ class SubtaskController extends Controller
 
 
     public function store_subtask(Request $request, $id)
-
-
     {
+
         $validator = Validator::make(['id' => $id], [
             'id' => 'required|numeric|gt:0|integer|exists:tasks,id',
         ]);
@@ -54,36 +58,43 @@ class SubtaskController extends Controller
             try {
                 $validatedData = $request->validate([
                     'title' => 'required|string|max:255',
-                    //"type" => 'required|string|max:255',
                     'status' => 'required|in:Pending,Canceled,Completed,OnProgress,OnHold',
                     'priority' => 'required|in:low,high',
-                    "start_date" => 'required|date|date_format:Y-m-d',
+                    'start_date' => 'required|date|date_format:Y-m-d',
                     'end_date' => 'required|date|date_format:Y-m-d',
                     //'time_spent' => 'required|date',
+                    'attachment_links' => 'nullable|file|max:10000|mimes:doc,docx,pdf',
                     'description' => 'required|string|max:255',
-                    'sub_task_attch_link' => 'required|string|max:255',
-
-                    //'project_id' => 'required|numeric|gt:0|integer|exists:projects,id',
                     'user_id' => 'required|numeric|gt:0|integer|exists:users,id',
-                    //'task_id' => 'required|numeric|gt:0|integer|exists:tasks,id',
+
                 ]);
 
                 $subtask = new Subtask();
                 $subtask->title = $validatedData['title'];
-                //$task->type = $validatedData['type'];
                 $subtask->start_date = $validatedData['start_date'];
                 $subtask->end_date = $validatedData['end_date'];
                 $subtask->description = $validatedData['description'];
                 $subtask->priority = $validatedData['priority'];
                 $subtask->status = $validatedData['status'];
-                //$task->project_id = $validatedData['project_id'];
                 $subtask->owner_id = $request->user()->id;
-                $subtask->sub_task_attch_link = $validatedData['sub_task_attch_link'];
                 $subtask->task_id = $id;
                 $subtask->user_id = $validatedData['user_id'];
 
-
                 $subtask->save();
+
+                if($request->hasFile('attachment_links')){
+                    foreach ($request->file('attachment_links') as $attachment_links) {
+
+                        $file_name = $attachment_links->getClientOriginalName();
+                        $file_to_store = 'subtask_file' . '_' . time().$file_name;
+                        $image->storeAs('public/' . 'subtask_file', $file_to_store);
+                        $path ='subtask_file/'.$file_to_store;
+
+                        $subtask->attachments()->attach($attachment_links);
+
+                    }
+
+                }
 
                 return response()->json(['message' => 'Record created successfully', $subtask], 200);
             } catch (ValidationException $e) {

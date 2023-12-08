@@ -11,8 +11,8 @@ class Attachment extends Model
 
     protected $fillable = ["attach_link", "subtask_id",];
 
-    public function subtask()
+    public function subtasks(): BelongsToMany
     {
-        return $this->belongsTo(Subtask::class);
+        return $this->belongsToMany(User::class, 'subtasks_attachments', 'attachment_id', 'subtask_id');
     }
 }

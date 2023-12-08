@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date("start_date");
             $table->date("end_date");
             $table->longText("desciption");
-            $table->string("sub_task_attch_link");
             $table->unsignedBigInteger("owner_id")->nullable();
 
             $table->unsignedBigInteger("user_id");
