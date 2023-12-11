@@ -25,15 +25,6 @@ class ProjectController extends Controller
 
     public function store(StoreProject $request)
     {
-
-         if ($request->hasFile('image')) {
-
-            $file_name = $request->file('image')->getClientOriginalName();
-            $file_to_store = 'project_images' . '_' . time().$file_name;
-            $request->file('image')->storeAs('public/' . 'project_images', $file_to_store);
-            $path ='storage/project_images/'.$file_to_store;
-        }
-
         $project = Project::create([
             'title' =>  $request->title,
             'type' =>  $request->type,
@@ -41,10 +32,19 @@ class ProjectController extends Controller
             'end_date' => $request->end_date,
             'description' =>  $request->description,
             'status' =>  $request->status,
-            'image' =>  $path,
         ]);
         $project->save();
 
+        if ($request->hasFile('image')) {
+
+            $file_name = $request->file('image')->getClientOriginalName();
+            $file_to_store = 'project_images' . '_' . time().$file_name;
+            $request->file('image')->storeAs('public/' . 'project_images', $file_to_store);
+            $path ='storage/project_images/'.$file_to_store;
+            $project->update([
+                'image' =>  $path,
+            ]);
+        }
         //add member for project table
         if ($users = $request->users) {
 

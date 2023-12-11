@@ -66,6 +66,7 @@ class SubtaskController extends Controller
                     'attachment_links.*' => 'nullable|file|mimes:jpg,jpeg,bmp,png,doc,docx,pdf,xlx,csv',
                     'description' => 'required|string|max:255',
                     'user_id' => 'required|numeric|gt:0|integer|exists:users,id',
+                    'comment' => 'required|string|max:255',
 
                 ]);
 
@@ -99,6 +100,25 @@ class SubtaskController extends Controller
 
                 }
 
+
+                if($request->comment){
+                    foreach($request->file('attachment_links') as $attachment_links) {
+                        $file_name = $attachment_links->getClientOriginalName();
+                        $file_to_store = 'subtask_file' . '_' . time().$file_name;
+                        $attachment_links->storeAs('public/' . 'subtask_file', $file_to_store);
+                        $path ='subtask_file/'.$file_to_store;
+
+                        $attachment = Attachment::create([
+                            'attach_link' => $path,
+                        ]);
+
+                        $subtask->attachments()->attach($attachment->id);
+
+                    }
+
+                }k-
+
+                $subtask = Subtask::find($subtask->id)->orderBy('id', 'Desc')->with('attachments')->first();
                 return response()->json(['message' => 'Record created successfully', $subtask], 200);
             } catch (ValidationException $e) {
                 return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 422);
@@ -118,37 +138,50 @@ class SubtaskController extends Controller
         try {
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
-                //"type" => 'required|string|max:255',
                 'status' => 'required|in:Pending,Canceled,Completed,OnProgress,OnHold',
                 'priority' => 'required|in:low,high',
                 "start_date" => 'required|date|date_format:Y-m-d',
                 'end_date' => 'required|date|date_format:Y-m-d',
-                //'time_spent' => 'required|date',
                 'description' => 'required|string|max:255',
-                'sub_task_attch_link' => 'required|string|max:255',
-
-                //'project_id' => 'required|numeric|gt:0|integer|exists:projects,id',
+                'attachment_links.*' => 'nullable|file|mimes:jpg,jpeg,bmp,png,doc,docx,pdf,xlx,csv',
                 'user_id' => 'required|numeric|gt:0|integer|exists:users,id',
                 'task_id' => 'required|numeric|gt:0|integer|exists:tasks,id',
+
             ]);
 
 
             $subtask = Subtask::findOrFail($id);
 
             $subtask->title = $validatedData['title'];
-            //$task->type = $validatedData['type'];
             $subtask->start_date = $validatedData['start_date'];
             $subtask->end_date = $validatedData['end_date'];
             $subtask->desc = $validatedData['description'];
             $subtask->priority = $validatedData['priority'];
             $subtask->status = $validatedData['status'];
-            //$task->project_id = $validatedData['project_id'];
-            $subtask->sub_task_attch_link = $validatedData['sub_task_attch_link'];
             $subtask->task_id = $validatedData['task_id'];
             $subtask->user_id = $validatedData['user_id'];
 
 
             $subtask->save();
+
+            if($request->hasFile('attachment_links')){
+                foreach($request->file('attachment_links') as $attachment_links){
+
+                    $file_name = $attachment_links->getClientOriginalName();
+                    $file_to_store = 'subtask_file' . '_' . time().$file_name;
+                    $attachment_links->storeAs('public/' . 'subtask_file', $file_to_store);
+                    $path ='subtask_file/'.$file_to_store;
+
+                    $attachment = Attachment::create([
+                        'attach_link' => $path,
+                    ]);
+
+                    $subtask->attachments()->sync($attachment->id);
+
+                }
+
+            }
+
 
             return response()->json(['message' => 'Record updated successfully', $subtask], 200);
         } catch (ValidationException $e) {
