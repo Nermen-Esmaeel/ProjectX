@@ -9,6 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\DashBoardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,11 @@ use App\Http\Controllers\AttachmentController;
 */
 
 /* ************************* Admin profile, login, logout********************************* */
-Route::prefix('Admin')->group( function(){
-    Route::post('login',[AdminAuthController::class ,'login']);
-    Route::get('profile',[AdminAuthController::class ,'userProfile']);
-    Route::post('logout',[AdminAuthController::class ,'logout']);
+
+Route::prefix('Admin')->group(function () {
+    Route::post('login', [AdminAuthController::class, 'login']);
+    Route::get('profile', [AdminAuthController::class, 'userProfile']);
+    Route::post('logout', [AdminAuthController::class, 'logout']);
 });
 
 
@@ -38,17 +40,17 @@ Route::post("/logout", [AuthController::class, "logout"])->middleware('auth:api'
 
 /* *************************create user, delete user, update user , show users********************************* */
 
-    Route::get('users',[UserController::class ,'index']);
-    Route::post('users',[UserController::class ,'store']);
-    Route::put('users/{id}',[UserController::class ,'update']);
-    Route::delete('users/{id}',[UserController::class ,'destroy']);
+Route::get('users', [UserController::class, 'index']);
+Route::post('users', [UserController::class, 'store']);
+Route::put('users/{id}', [UserController::class, 'update']);
+Route::delete('users/{id}', [UserController::class, 'destroy']);
 
-    /* *************************create project, delete project, update project , show project********************************* */
+/* *************************create project, delete project, update project , show project********************************* */
 
-    Route::get('projects',[ProjectController::class ,'index']);
-    Route::post('projects',[ProjectController::class ,'store']);
-    Route::put('projects/{id}',[ProjectController::class ,'update']);
-    Route::delete('projects/{id}',[ProjectController::class ,'destroy']);
+Route::get('projects', [ProjectController::class, 'index']);
+Route::post('projects', [ProjectController::class, 'store']);
+Route::put('projects/{id}', [ProjectController::class, 'update']);
+Route::delete('projects/{id}', [ProjectController::class, 'destroy']);
 
 
 /* *************************Task********************************* */
@@ -141,3 +143,14 @@ Route::get("/attachment/{id}", [AttachmentController::class, "subtask_attachment
 
 //this route to store a attachment related to specific subtask by passing the subtask_id..
 Route::post("store_attachment/{id}", [AttachmentController::class, "store_attachment"]);
+
+
+/* *************************DashBoards********************************* */
+
+Route::get("/task_status", [DashBoardController::class, "task_status"]);
+
+Route::get("/project_status", [DashBoardController::class, "project_status"])->middleware('auth:api');
+
+Route::get("/performance", [DashBoardController::class, "performance"]);
+
+Route::get("/work_log/{id}", [DashBoardController::class, "work_log"]);
