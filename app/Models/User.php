@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -85,6 +86,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function projects(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'projects_users', 'user_id', 'project_id');
+        return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id');
     }
 }
