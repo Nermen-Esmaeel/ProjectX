@@ -135,4 +135,49 @@ class DashBoardController extends Controller
 
         return response()->json($completedTasksPercentage);
     }
+
+    public function total_work_log($id)
+
+    {
+        $completedTasks = Task::where("user_id", $id)->where("status", "Completed")->get();
+
+        $timeSpent_completedTasks = [];
+        foreach ($completedTasks as $completedTask) {
+            $timeSpent_completedTasks[] = $completedTask->time_spent;
+        }
+
+        $totalMonths = 0;
+        $totalWeeks = 0;
+        $totalDays = 0;
+
+        foreach ($timeSpent_completedTasks as $timeSpent) {
+            $pattern = '/(\d+)\s+(months|weeks|days)/i';
+            preg_match_all($pattern, $timeSpent, $matches, PREG_SET_ORDER);
+
+            foreach ($matches as $match) {
+                $value = (int) $match[1];
+                $unit = strtolower($match[2]);
+
+                switch ($unit) {
+                    case 'months':
+                        $totalMonths += $value;
+                        break;
+                    case 'weeks':
+                        $totalWeeks += $value;
+                        break;
+                    case 'days':
+                        $totalDays += $value;
+                        break;
+                }
+            }
+        }
+
+        $result = [
+            'months' => $totalMonths,
+            'weeks' => $totalWeeks,
+            'days' => $totalDays,
+        ];
+
+        return response()->json($result);
+    }
 }

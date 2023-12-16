@@ -31,13 +31,6 @@ Route::prefix('Admin')->group(function () {
 });
 
 
-/* *************************create user, login, logout********************************* */
-
-Route::post("/register", [AuthController::class, "register"]);
-Route::post("/login", [AuthController::class, "login"]);
-Route::post("/logout", [AuthController::class, "logout"])->middleware('auth:api');
-
-
 /* *************************create user, delete user, update user , show users********************************* */
 
     Route::get('users',[UserController::class ,'index']);
@@ -156,3 +149,5 @@ Route::get("/project_status", [DashBoardController::class, "project_status"])->m
 Route::get("/performance", [DashBoardController::class, "performance"]);
 
 Route::get("/work_log/{id}", [DashBoardController::class, "work_log"]);
+
+Route::get("/total_work_log/{id}", [DashBoardController::class, "total_work_log"]);
