@@ -11,6 +11,8 @@ class Attachment extends Model
 
     protected $fillable = ['attach_link'];
 
+    protected $hidden = ['pivot'];
+
     public function subtasks(): BelongsToMany
     {
         return $this->belongsToMany(Subtask::class, 'subtasks_attachments', 'attachment_id', 'subtask_id');

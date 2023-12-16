@@ -26,6 +26,18 @@ class UserController extends Controller
 
    }
 
+     //show one user
+     public function show($id)
+     {
+         $user = User::findOrFail($id);
+
+         //fetch  post from database and store in $posts
+
+             $user = User::query()->where('id', '=', $id)->first();
+
+             return $this->apiResponse(new UserResource($user), 'ok', 200);
+     }
+
    // store user
    public function store(UserStore $request){
 
